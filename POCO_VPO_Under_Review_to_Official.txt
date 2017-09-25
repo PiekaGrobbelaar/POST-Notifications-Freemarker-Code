@@ -3,7 +3,7 @@ Dear ${(reqDoc.vendorName)!""},<br />
 Please find the revised PO attached to this email.<br />
 The details are as follows:<br />
 <br />
-Order number: <a href="http://${(sysHost)!''}:${(sysPort)!''}/${(sysContextPath)!''}/entry/#${(sysWebSiteHash)!''}">${(reqDoc.custRef)!""}</a>, ${(reqDoc.vpoNo)!""}<br />
+Order number: <a href="http://${(sysHost)!''}:${(sysPort)!''}/${(sysContextPath)!''}/entry/#${(sysWebSiteHash)!''}">${(reqDoc.customerVpoRef)!""}</a><br />
 <#assign date1=reqDoc.custDate1!"not found"><#if date1!="not found"><#assign date1Str=date1.format("DD/MM/YYYY")>Latest Shipment Date: ${date1Str}<#else>Latest Shipment Date:</#if><br />
 Payment term: ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""}<br />
 Port of Loading:<#assign shipments=reqDoc.vpoShip><#if shipments[0]??><#list shipments as shipment>${(shipment.portOfLoading.name)!""}</#list></#if><br />
