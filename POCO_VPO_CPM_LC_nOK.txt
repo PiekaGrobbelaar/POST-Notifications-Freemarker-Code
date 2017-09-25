@@ -1,6 +1,6 @@
 Dear<#assign parties=relatedDoc.parties><#if parties[0]??><#list parties as party><#if party.partyNameName == "Import">${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""}<br />
 </#if></#list></#if><br />
-Please note the LC has not yet been opened for the order <a href="http://${(sysHost)!''}:${(sysPort)!''}/${(sysContextPath)!''}/entry/#${(sysWebSiteHash)!''}">${(relatedDoc.custRef)!""}</a>from vendor ${(relatedDoc.vendorName)!""}, placed on<#assign date1=relatedDoc.createdOn!"not found"><#if date1!="not found"><#assign date1Str=date1.format("DD/MM/YYYY")>placed on: ${date1Str}<#else>placed on: with<#assign date1=reqDoc.custDate1!"not found"><#if date1!="not found"><#assign date1Str=date1.format("DD/MM/YYYY")>Latest Shipment Date: ${date1Str}<#else>Latest Shipment Date:<br />
+Please note the LC has not yet been opened for the order <a href="http://${(sysHost)!''}:${(sysPort)!''}/${(sysContextPath)!''}/entry/#${(sysWebSiteHash)!''}">${(relatedDoc.custRef)!""}</a> from vendor ${(relatedDoc.vendorName)!""}, placed on<#assign date1=relatedDoc.createdOn!"not found"><#if date1!="not found"><#assign date1Str=date1.format("DD/MM/YYYY")>placed on: ${date1Str}<#else>placed on: with<#assign date1=reqDoc.custDate1!"not found"><#if date1!="not found"><#assign date1Str=date1.format("DD/MM/YYYY")>Latest Shipment Date: ${date1Str}<#else>Latest Shipment Date:<br />
 </#if><br />
 Thanks in advance and best regards<br />
 <br />
