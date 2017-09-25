@@ -1,0 +1,73 @@
+<#assign contacts=reqDoc.vpoContact>
+<#if contacts[0]??>
+  <#list contacts as contact>
+    <#if contact.position?lower_case?contains('poco')>
+      <#assign vendor_contact = 'Ansprechpartner: ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'
+      <#assign vendor_contact_tel = 'Tel: ${(contact.telNo)!""}'>
+      <#assign vendor_contact_fax = 'Fax: ${(contact.faxNo)!""}'>
+      <#assign vendor_contact_email = 'Email: ${(contact.email)!""}'>
+    </#if>
+  </#list>
+</#if>
+
+<#assign parties=reqDoc.parties>
+<#if parties[0]??>
+  <#list parties as party>
+    <#if party.partyNameName == "Import">
+      <#assign from_contact = '${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""}'
+    </#if>
+  </#list>
+</#if>
+
+<#assign shipments=reqDoc.vpoShip>
+<#if shipments?size gt 1>
+  <#assign opening = 'Sehr geehrte Damen und Herren, wir bitten, mehrere Container wie folgt beim Lieferanten zu übernehmen:'>
+<#else>
+  <#assign opening = 'Sehr geehrte Damen und Herren, wir bitten, einen Container wie folgt beim Lieferanten zu übernehmen:'>
+  <#assign container1=(shipments[0].noOfContainer)!0>
+  <#assign container2=(shipments[0].noOfContainer2)!0>
+  <#assign container3=(shipments[0].custNumber2)!0>
+  <#if (container1 + container2 + container3) gt 1>
+    <#assign opening = 'Sehr geehrte Damen und Herren, wir bitten, mehrere Container wie folgt beim Lieferanten zu übernehmen:'>    
+  </#if>
+</#if>
+
+${opening}<br />
+Order-Nr.: ${(reqDoc.customerVpoRef)!""}<br />
+
+<#if shipments[0]??>
+  <#list shipments as shipment>
+    <#assign container1=(shipment.noOfContainer)!0, container2=(shipment.noOfContainer2)!0, container3=(shipment.custNumber2)!0>
+    <#if container1 gt 0>
+      Anzahl ${(shipment.containerType.name)!""}: ${container1}<br />
+    </#if>
+    <#if container2 gt 0>
+      Anzahl ${(shipment.containerType2.name)!""}: ${container2}<br />
+    </#if>
+    <#if container3 gt 0>
+      Anzahl ${(shipment.custCodelist2.name)!""}: ${container3}<br />
+    </#if>
+    Verschiffungshafen: ${(shipment.portOfLoading.name)!""}
+    Bestimmungshafen: ${(shipment.portOfDischarge.name)!""}
+    Lagerhaus: ${(shipment.finalDestination.name)!""}
+    ETD: ${(shipment.custDate1).format("DD/MM/YYYY")!""}
+  </#list>
+</#if>
+
+<br />
+Verschiffung nicht mehr als zwei Wochen vorher<br />
+<br />
+Lieferant: ${(reqDoc.vendorName)!""}<br />
+${vendor_contact} <br />
+${vendor_contact_tel} <br />
+${vendor_contact_fax} <br />
+${vendor_contact_email} <br />
+<br />
+Incoterm: ${(reqDoc.incoterm.name)!""}<br />
+<br />
+Für Rückfragen stehen wir Ihnen gerne zur Verfügung.<br />
+<br />
+Mit freundlichen Grüßen<br />
+<br />
+${from_contact} <br />
+POCO Service AG
