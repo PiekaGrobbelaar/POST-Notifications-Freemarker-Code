@@ -7,7 +7,7 @@ Please contact Global Warehouse and Logistics GmbH, Mr. Dirk Schauer (dirk.schau
 <br />
 As stated in supplier contract and PO, containers must be booked at least three weeks prior to the estimated shipping date with our forwarding agent!!<br />
 <br />
-Above mentioned forwarder has to be the 2nd Notify on the B/L! Please see as follows: Consignee: TO ORDER 1st Notify: POCO Service AG, Industriestrasse 17, 59192 Bergkamen, Germany 2nd Notify: {!Opportunity.Shipper_Firmenname__c},{!Opportunity.Shipper_Adresse__c}<br />
+Above mentioned forwarder has to be the 2nd Notify on the B/L! Please see as follows: Consignee: TO ORDER 1st Notify: POCO Service AG, Industriestrasse 17, 59192 Bergkamen, Germany 2nd Notify: Global Warehouse & Logistics GmbH, Langerbrugger Strasse 5, 26655 Westerstede, Germany<br />
 <br />
 The container type must be booked as follows: Number of ${(shipment.containerType.name)!""}: ${container1} Number of ${(shipment.containerType2.name)!""}: ${container2} Number of ${(shipment.custCodelist2.name)!""}: ${container3}<br />
 <br />
