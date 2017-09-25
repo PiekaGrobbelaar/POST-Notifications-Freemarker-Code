@@ -1,0 +1,20 @@
+<span style="font-family:arial,helvetica,sans-serif;">Dear ${(relatedDoc.vendorName)!""},<br />
+<br />
+Our POCO Order No. ${(relatedDoc.custPoNo)!""} is supposed to be shipped in 3 weeks.<br />
+Please confirm immediately if you can keep the scheduled shipment date or if there are any problems.<br />
+<br />
+Please contact Global Warehouse and Logistics GmbH, Mr. Dirk Schauer (dirk.schauer@globalwarehouse.de) to arrange shipment.<br />
+<br />
+As stated in supplier contract and PO, containers must be booked at least three weeks prior to the estimated shipping date with our forwarding agent!!<br />
+<br />
+Above mentioned forwarder has to be the 2nd Notify on the B/L! Please see as follows: Consignee: TO ORDER 1st Notify: POCO Service AG, Industriestrasse 17, 59192 Bergkamen, Germany 2nd Notify: {!Opportunity.Shipper_Firmenname__c},{!Opportunity.Shipper_Adresse__c}<br />
+<br />
+The container type must be booked as follows: Number of ${(shipment.containerType.name)!""}: ${container1} Number of ${(shipment.containerType2.name)!""}: ${container2} Number of ${(shipment.custCodelist2.name)!""}: ${container3}<br />
+<br />
+If there are any problems about the container type we need information immediately so we can react accordingly. Please put one carton of each item in front of the container to avoid costs for customs examination. Please send photos of container loading on which we can clearly see that the different cartons are right at the door. We need this for our reference and to avoid misunderstandings and disputes. Otherwise, we will charge costs for customs examination to your account anyway. Please send the booking confirmation for our information by email once you have booked the vessel! FUMIGATION: Container may be only fumigated, if you use wood-packing materials that contain solid wood / timber and logs. Don’t fumigate a container for cardboard boxes, plywood, blockboard, MDF/HDF (wood-based products obtained by pressing wood fibres), OSB (a competitor for plywood), hardboard, particle board and some other man-made boards! Fumigation certificate must be provided with shipment documents!<br />
+<br />
+Thanks in advance and best regards,<br />
+<br />
+${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""},<br />
+<br />
+POCO Service AG</span><br />
