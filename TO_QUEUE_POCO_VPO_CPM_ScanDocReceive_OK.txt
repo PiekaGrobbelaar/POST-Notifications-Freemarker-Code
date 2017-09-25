@@ -1,0 +1,2 @@
+{ "NotificationType": "POCO_VPO_CPM_ScanDocReceive_OK", "CustPoNo": "${(relatedDoc.custPoNo)!""}", "CustomerRef": "${(relatedDoc.custRef)!""}", "VendorRef": "${(relatedDoc.vendorRef)!""}", "VPORef": "${(relatedDoc.refNo)!""}", "VPOVersion": "${(relatedDoc.version)!""}" },"ShipmentNo": 
+<#assign shipments=relatedDoc.vpoShip><#if shipments[0]??><#list shipments as shipment> ${(shipment.shipmentNo)!""}</#list></#if>
