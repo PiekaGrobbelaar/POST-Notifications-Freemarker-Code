@@ -1,9 +1,16 @@
-Dear ${(relatedDoc.vendorName)!""}<#assign parties=relatedDoc.parties><#if parties[0]??><#list parties as party></#list></#if><br />
+<#assign parties=relatedDoc.parties>
+Dear ${(relatedDoc.vendorName)!""}<br />
 <br />
-Our order <a href="http://${(sysHost)!''}:${(sysPort)!''}/${(sysContextPath)!''}/entry/#${(sysWebSiteHash)!''}">${(relatedDoc.custRef)!""}</a>  has recently been shipped. Please send copies of all documents by email asap.<br />
+Our order 
+<a href="http://${(sysHost)!''}:${(sysPort)!''}/${(sysContextPath)!''}/entry/#${(sysWebSiteHash)!''}">
+${(relatedDoc.custRef)!""}</a>  
+has recently been shipped. Please send copies of all documents by email asap.<br />
 <br />
 Thanks in advance and best regards,<br />
-<#assign parties=relatedDoc.parties><#if parties[0]??><#list parties as party>
-<p>
-	<#if party.partyNameName == "Import">${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""},</#if></p>
-</#list></#if>POCO Service AG
+<#if parties[0]??>
+	<#list parties as party>
+		<#if party.partyNameName == "Import">
+			${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""},
+		</#if>
+	</#list>
+</#if>POCO Service AG
