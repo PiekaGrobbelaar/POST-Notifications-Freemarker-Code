@@ -1,0 +1,21 @@
+Dear ${(reqDoc.vendorName)!""},<br />
+<br />
+Please find the revised PO attached to this email.<br />
+The details are as follows:<br />
+<br />
+Order number: <a href="http://${(sysHost)!''}:${(sysPort)!''}/${(sysContextPath)!''}/entry/#${(sysWebSiteHash)!''}">${(reqDoc.custRef)!""""}</a>, ${(reqDoc.vpoNo)!""""}<br />
+<#assign date1=reqDoc.custDate1!"not found"><#if date1!="not found"><#assign date1Str=date1.format("DD/MM/YYYY")>Latest Shipment Date: ${date1Str}<#else>Latest Shipment Date:</#if><br />
+Payment term: ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""}<br />
+Port of Loading:<#assign shipments=reqDoc.vpoShip><#if shipments[0]??><#list shipments as shipment>${(shipment.portOfLoading.name)!""}</#list></#if><br />
+<br />
+Attached please find the item details.<br />
+Forwarding agent for this order is Global Warehouse and Logistics GmbH. Contact is Mr. Dirk Schauer (dirk.schauer@globalwarehouse.de).<br />
+<br />
+Please note that the goods need to be produced in accordance with European quality standards.<br />
+This order is computer generated and valid and official with no signature and stamp from our side. Instead of issueing a proforma invoice please sign and stamp this purchase order on every page in the lower right corner and return by email.<br />
+<br />
+Should you have any further questions, please do not hesitate to contact me. Thanks in advance and best regards,<#assign parties=reqDoc.parties><#if parties[0]??><#list parties as party>
+<p>
+	<#if party.partyNameName == "Import">${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""},</#if></p>
+</#list></#if><br />
+POCO Service AG
