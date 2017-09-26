@@ -33,17 +33,18 @@
 </#if>
 
 <#assign from_contact = 'Import Department'>
-<#assign parties=reqDoc.parties>
+<#assign parties = reqDoc.parties>
 <#if parties[0]??>
   <#list parties as party>
-    <#assign contact_type = party.partyNamName!'catch'>
-	  <#assign contact_name = party.contactUser.firstName!'catch'>
-	  <#assign contact_lastname = party.contactUser.lastName!'catch'>
-    <#if (contact_type == 'Import') && (contact_name == 'catch') && (contact_lastname != 'catch')>
-	    <#assign from_contact = '${contact_name} ${contact_lastname}'>
-	  </#if>
+    <#assign contact_type = (party.partyNameName)!'catch'>
+    <#assign contact_name = (party.contactUser.firstName)!'catch'>
+    <#assign contact_lastname = (party.contactUser.lastName)!'catch'>
+    <#if (contact_type == 'Import') && (contact_name != 'catch') && (contact_lastname != 'catch')>
+      <#assign from_contact = '${contact_name} ${contact_lastname}'>
+    </#if>
   </#list>
 </#if>
+
 
 <#assign shipments=reqDoc.vpoShip>
 <#if shipments?size gt 1>
