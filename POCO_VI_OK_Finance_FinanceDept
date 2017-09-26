@@ -1,0 +1,21 @@
+Hallo Herr Bolte,
+
+für den oben genannten Auftrag erhalten Sie die Inkassoandienung zwecks Weiterleitung an die Commerzbank.
+
+Auftragsnummer: ${(reqDoc.custPoNo)!""}
+Warenwert: {!Opportunity.Amount}
+${(reqDoc.totalAmt)!""} ${(reqDoc.totalAmount)!""}
+Anzahlungsbetrag: {!Opportunity.Betrag_Anzahlung_IST__c}
+Sonstiger Abzug: ${(reqDoc.currency)!""} (BA Nr. xxx - Ursache)
+Auszahlungsbetrag: {!Opportunity.Betrag_Restzahlung_IST__c}
+
+Rechnungsnummer: ${(reqDoc.vendorDocNo)!""}
+
+Lieferantennr. AS400: {!Account.Lieferanten_Nr_AS_400__c}
+
+
+Mit freundlichen Grüßen
+
+{!Opportunity.LastModifiedBy}
+
+POCO Service AG
