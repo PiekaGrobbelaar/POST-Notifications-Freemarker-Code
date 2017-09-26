@@ -1,8 +1,10 @@
-<#assign contacts=reqDoc.vpoContact>
+<#assign contacts = reqDoc.vpoContact>
+
+<#assign vendor_contact = 'nothing'>
 <#if contacts[0]??>
   <#list contacts as contact>
-    <#if contact.position?lower_case?contains('poco')>
-      <#assign vendor_contact = 'Ansprechpartner: ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'
+    <#if (contact.position!'')?lower_case?contains('poco')>
+      <#assign vendor_contact = '<strong>Ansprechpartner:</strong> ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
       <#assign vendor_contact_tel = 'Tel: ${(contact.telNo)!""}'>
       <#assign vendor_contact_fax = 'Fax: ${(contact.faxNo)!""}'>
       <#assign vendor_contact_email = 'Email: ${(contact.email)!""}'>
@@ -10,12 +12,36 @@
   </#list>
 </#if>
 
+<#if vendor_contact == 'nothing'>
+  <#if contacts[0]??>
+    <#list contacts as contact>
+      <#if (contact.contactTypeIdValue!'' == 'Notified') && (contact.fromPartyType!'' == 'vendor')>
+        <#assign vendor_contact = '<strong>Ansprechpartner:<strong/> ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
+        <#assign vendor_contact_tel = 'Tel: ${(contact.telNo)!""}'>
+        <#assign vendor_contact_fax = 'Fax: ${(contact.faxNo)!""}'>
+        <#assign vendor_contact_email = 'Email: ${(contact.email)!""}'>
+      </#if>
+    </#list>
+  </#if>
+</#if>
+
+<#if vendor_contact == 'nothing'>
+  <#assign vendor_contact = '<strong>Ansprechpartner:</strong> (no designated contact!)'>
+  <#assign vendor_contact_tel = 'Tel: (no designated contact!)'>
+  <#assign vendor_contact_fax = 'Fax: (no designated contact!)'>
+  <#assign vendor_contact_email = 'Email: (no designated contact!)'>
+</#if>
+
+<#assign from_contact = 'Import Department'>
 <#assign parties=reqDoc.parties>
 <#if parties[0]??>
   <#list parties as party>
-    <#if party.partyNameName == "Import">
-      <#assign from_contact = '${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""}'
-    </#if>
+    <#assign contact_type = party.partyNamName!'catch'>
+	  <#assign contact_name = party.contactUser.firstName!'catch'>
+	  <#assign contact_lastname = party.contactUser.lastName!'catch'>
+    <#if (contact_type == 'Import') && (contact_name == 'catch') && (contact_lastname != 'catch')>
+	    <#assign from_contact = '${contact_name} ${contact_lastname}'>
+	  </#if>
   </#list>
 </#if>
 
@@ -33,9 +59,9 @@
 </#if>
 
 ${opening}<br /><br />
+
 Order-Nr.: ${(reqDoc.customerVpoRef)!""}<br /><br />
 
-<#assign the_shipmentNo = ''>
 <#list shipments as shipment>
   <#assign shipping_date = shipment.shipmentDate>
   <#assign shipping_date_str = shipping_date.format("DD/MM/YYYY")>
@@ -44,26 +70,33 @@ Order-Nr.: ${(reqDoc.customerVpoRef)!""}<br /><br />
   <#assign container1 = (shipment.noOfContainer)!0>
   <#assign container2 = (shipment.noOfContainer2)!0>
   <#assign container3 = (shipment.custNumber2)!0>
-  <if shipments?size gt 1>
+  
+  <#if shipments?size gt 1>
     <#assign the_shipmentNo = 'Shipment No: ${shipment.shipmentNo}'>
     ${the_shipmentNo}<br />
   </#if>
+  
   ${awesome_shipping_date}<br />
   ${port_of_loading}<br />
+  
   <#if container1 gt 0>
-    <#assign container1name = 'Anzahl ${shipment.containerType.name)!""}:'>
+    <#assign container1name = 'Anzahl ${(shipment.containerType.name)!""}:'>
     ${container1name} ${container1}<br />
   </#if>
+  
   <#if container2 gt 0>
-    <#assign container2name = 'Anzahl $(shipment.containerType2.name)!""}:'>
+    <#assign container2name = 'Anzahl ${(shipment.containerType2.name)!""}:'>
     ${container2name} ${container2}<br />
   </#if>
+  
   <#if container3 gt 0>
-    <#assign container3name = 'Anzahl $(shipment.custCodelist2.name)!""}:'>
+    <#assign container3name = 'Anzahl ${(shipment.custCodelist2.name)!""}:'>
     ${container3name} ${container3}<br />
   </#if>
+  
   Bestimmungshafen: ${(shipment.portOfDischarge.name)!""} <br />
   Lagerhaus: ${(shipment.finalDestination.name)!""} <br /><br />
+  
 </#list>
 
 Verschiffung nicht mehr als zwei Wochen vorher<br />
