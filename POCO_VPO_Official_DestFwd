@@ -27,32 +27,52 @@
   <#assign container1=(shipments[0].noOfContainer)!0>
   <#assign container2=(shipments[0].noOfContainer2)!0>
   <#assign container3=(shipments[0].custNumber2)!0>
+  <#assign container1name = 'Anzahl ${shipment.containerType.name)!''}:'>
+  <#assign container2name = 'Anzahl $(shipment.containerType2.name)!''}:'>
+  <#assign container3name = 'Anzahl $(shipment.custCodelist2.name)!''}:'>
   <#if (container1 + container2 + container3) gt 1>
     <#assign opening = 'Sehr geehrte Damen und Herren, wir bitten, mehrere Container wie folgt beim Lieferanten zu übernehmen:'>    
   </#if>
 </#if>
 
-${opening}<br />
+${opening}<br /><br />
 Order-Nr.: ${(reqDoc.customerVpoRef)!""}<br />
 
-<#if shipments[0]??>
-  <#list shipments as shipment>
-    <#assign container1=(shipment.noOfContainer)!0, container2=(shipment.noOfContainer2)!0, container3=(shipment.custNumber2)!0>
-    <#if container1 gt 0>
-      Anzahl ${(shipment.containerType.name)!""}: ${container1}<br />
-    </#if>
-    <#if container2 gt 0>
-      Anzahl ${(shipment.containerType2.name)!""}: ${container2}<br />
-    </#if>
-    <#if container3 gt 0>
-      Anzahl ${(shipment.custCodelist2.name)!""}: ${container3}<br />
-    </#if>
-    Verschiffungshafen: ${(shipment.portOfLoading.name)!""}
-    Bestimmungshafen: ${(shipment.portOfDischarge.name)!""}
-    Lagerhaus: ${(shipment.finalDestination.name)!""}
-    ETD: ${(shipment.custDate1).format("DD/MM/YYYY")!""}
-  </#list>
-</#if>
+<#assign shipmentNo=''>
+
+<#list shipments as shipment>
+  <if shipments?size gt 1>
+    <#assign shipmentNo = 'Shipment No: ${shipment.shipmentNo}'>
+  </#if>
+  <assign shipping_date = shipment.shipmentDate>
+  <#assign shipping_date_str = shipping_date.format("DD/MM/YYYY")>
+  <#assign awesome_shipping_date = 'Shipment Date: ${shipping_date_str}'>
+  <#assign port_of_loading = 'Port of Loading: ${(shipment.portOfLoading.name)!""}'>
+  <#assign container1=(shipment.noOfContainer)!0>
+  <#assign container2=(shipment.noOfContainer2)!0>
+  <#assign container3=(shipment.custNumber2)!0>
+  <#assign container1name = 'Anzahl ${shipment.containerType.name)!''}:'>
+  <#assign container2name = 'Anzahl $(shipment.containerType2.name)!''}:'>
+  <#assign container3name = 'Anzahl $(shipment.custCodelist2.name)!''}:'>
+  <if shipments?size gt 1>
+    <#assign shipmentNo = 'Shipment No: ${shipment.shipmentNo}'>
+    ${shipmentNo}<br />
+  </#if>
+  ${awesome_shipping_date}<br />
+  ${port_of_loading}<br />
+  <#if container1 gt 0>
+    ${container1name} ${container1}<br />
+  </#if>
+  <#if container2 gt 0>
+    ${container2name} ${container2}<br />
+  </#if>
+  <#if container3 gt 0>
+    ${container3name}: ${container3}<br />
+  </#if>
+  Verschiffungshafen: ${(shipment.portOfLoading.name)!""} <br />
+  Bestimmungshafen: ${(shipment.portOfDischarge.name)!""} <br />
+  Lagerhaus: ${(shipment.finalDestination.name)!""} <br /><br />
+</#list>
 
 <br />
 Verschiffung nicht mehr als zwei Wochen vorher<br />
