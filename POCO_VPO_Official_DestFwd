@@ -1,13 +1,40 @@
+<#assign pad = ' '>
+<#assign pad_contact = '                        '>
+<#assign experimental_tab = '\t\t\t'>
 <#assign contacts = reqDoc.vpoContact>
 
 <#assign vendor_contact = 'nothing'>
 <#if contacts[0]??>
   <#list contacts as contact>
-    <#if (contact.position!'')?lower_case?contains('poco')>
-      <#assign vendor_contact = '<strong>Ansprechpartner:</strong> ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
-      <#assign vendor_contact_tel = 'Tel: ${(contact.telNo)!""}'>
-      <#assign vendor_contact_fax = 'Fax: ${(contact.faxNo)!""}'>
-      <#assign vendor_contact_email = 'Email: ${(contact.email)!""}'>
+    <#if (contact.position!'catch')?lower_case?contains('poco')>
+      
+      <#assign vendor_contact = '${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
+    
+      <#assign tel = (contact.telNo)!'(none)'>
+      <#assign tel_out = tel>
+      <#if (tel[0] == '+') && (tel?length == 12)>
+        <#assign country = tel[0..2]>
+        <#assign seg1 = tel[3]>
+        <#assign seg2 = tel[4..5]>
+        <#assign seg3 = tel[6..7]>
+        <#assign seg4 = tel[10..]>
+        <#assign tel_out = '${country} ${seg1} ${seg2} ${seg3} ${seg4}'>
+      </#if>    
+      <#assign vendor_contact_tel = '${tel_out}'>
+    
+      <#assign tel = (contact.faxNo)!'(none)'>
+      <#assign tel_out = tel>
+      <#if (tel[0] == '+') && (tel?length == 12)>
+        <#assign country = tel[0..2]>
+        <#assign seg1 = tel[3]>
+        <#assign seg2 = tel[4..5]>
+        <#assign seg3 = tel[6..7]>
+        <#assign seg4 = tel[10..]>
+        <#assign tel_out = '${country} ${seg1} ${seg2} ${seg3} ${seg4}'>
+      </#if>    
+      <#assign vendor_contact_fax = '${tel_out}'>
+
+      <#assign vendor_contact_email = '${(contact.email)!""}'>
     </#if>
   </#list>
 </#if>
@@ -15,18 +42,42 @@
 <#if vendor_contact == 'nothing'>
   <#if contacts[0]??>
     <#list contacts as contact>
-      <#if (contact.contactTypeIdValue!'' == 'Notified') && (contact.fromPartyType!'' == 'vendor')>
-        <#assign vendor_contact = '<strong>Ansprechpartner:<strong/> ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
-        <#assign vendor_contact_tel = 'Tel: ${(contact.telNo)!""}'>
-        <#assign vendor_contact_fax = 'Fax: ${(contact.faxNo)!""}'>
-        <#assign vendor_contact_email = 'Email: ${(contact.email)!""}'>
+      <#if ((contact.contactTypeIdValue)!'catch' == 'Notified') && ((contact.fromPartyType)!'catch' == 'vendor')>
+        
+        <#assign vendor_contact = '${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
+    
+        <#assign tel = (contact.telNo)!'(none)'>
+        <#assign tel_out = tel>
+        <#if (tel[0] == '+') && (tel?length == 12)>
+          <#assign country = tel[0..2]>
+          <#assign seg1 = tel[3]>
+          <#assign seg2 = tel[4..5]>
+          <#assign seg3 = tel[6..7]>
+          <#assign seg4 = tel[10..]>
+          <#assign tel_out = '${country} ${seg1} ${seg2} ${seg3} ${seg4}'>
+        </#if>    
+        <#assign vendor_contact_tel = '${tel_out}'>
+		
+        <#assign tel = (contact.faxNo)!'(none)'>
+        <#assign tel_out = tel>
+        <#if (tel[0] == '+') && (tel?length == 12)>
+          <#assign country = tel[0..2]>
+          <#assign seg1 = tel[3]>
+          <#assign seg2 = tel[4..5]>
+          <#assign seg3 = tel[6..7]>
+          <#assign seg4 = tel[10..]>
+          <#assign tel_out = '${country} ${seg1} ${seg2} ${seg3} ${seg4}'>
+        </#if>
+		<#assign vendor_contact_fax = '${tel_out}'>
+    
+        <#assign vendor_contact_email = '${(contact.email)!""}'>
       </#if>
     </#list>
   </#if>
 </#if>
 
 <#if vendor_contact == 'nothing'>
-  <#assign vendor_contact = '<strong>Ansprechpartner:</strong> (no designated contact!)'>
+  <#assign vendor_contact = '(no designated contact!)'>
   <#assign vendor_contact_tel = 'Tel: (no designated contact!)'>
   <#assign vendor_contact_fax = 'Fax: (no designated contact!)'>
   <#assign vendor_contact_email = 'Email: (no designated contact!)'>
@@ -45,7 +96,6 @@
   </#list>
 </#if>
 
-
 <#assign shipments=reqDoc.vpoShip>
 <#if shipments?size gt 1>
   <#assign opening = 'Sehr geehrte Damen und Herren, wir bitten, mehrere Container wie folgt beim Lieferanten zu übernehmen:'>
@@ -61,7 +111,7 @@
 
 ${opening}<br /><br />
 
-Order-Nr.: ${(reqDoc.customerVpoRef)!""}<br /><br />
+<strong>Order-Nr:</strong> ${pad} ${(reqDoc.customerVpoRef)!""}<br /><br />
 
 <#list shipments as shipment>
   <#assign shipping_date = shipment.shipmentDate>
@@ -72,9 +122,10 @@ Order-Nr.: ${(reqDoc.customerVpoRef)!""}<br /><br />
   <#assign container2 = (shipment.noOfContainer2)!0>
   <#assign container3 = (shipment.custNumber2)!0>
   
+  
   <#if shipments?size gt 1>
-    <#assign the_shipmentNo = 'Shipment No: ${shipment.shipmentNo}'>
-    ${the_shipmentNo}<br />
+  <#assign the_shipmentNo = shipment.shipmentNo>
+    <strong>Shipment No ${the_shipmentNo}:</strong><br />
   </#if>
   
   ${awesome_shipping_date}<br />
@@ -100,13 +151,13 @@ Order-Nr.: ${(reqDoc.customerVpoRef)!""}<br /><br />
   
 </#list>
 
-Verschiffung nicht mehr als zwei Wochen vorher<br />
+Verschiffung nicht mehr als zwei Wochen vorher:<br />
 <br />
-Lieferant: ${(reqDoc.vendorName)!""}<br />
-${vendor_contact} <br />
-${vendor_contact_tel} <br />
-${vendor_contact_fax} <br />
-${vendor_contact_email} <br />
+<strong>Lieferant:</strong> \t ${(reqDoc.vendorName)!""}<br />
+<strong>Ansprechpartner:</strong> \t ${vendor_contact} <br />
+<#nt>Tel: ${vendor_contact_tel} <#nt><br />
+<#nt>Fax: ${vendor_contact_fax} <#nt><br />
+<#nt>Email: ${vendor_contact_email} <#nt><br />
 <br />
 Incoterm: ${(reqDoc.incoterm.name)!""}<br />
 <br />
