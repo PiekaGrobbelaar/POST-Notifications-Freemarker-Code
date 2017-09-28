@@ -3,19 +3,25 @@ Hallo Herr Bolte,
 für den oben genannten Auftrag erhalten Sie die Inkassoandienung zwecks Weiterleitung an die Commerzbank.
 
 Auftragsnummer: ${(reqDoc.custPoNo)!""}
-Warenwert: {!Opportunity.Amount}
-${(reqDoc.totalAmt)!""} ${(reqDoc.totalAmount)!""}
-Anzahlungsbetrag: {!Opportunity.Betrag_Anzahlung_IST__c}
+
+Warenwert:${(reqDoc.totalAmount)!""}
+This is the gross amount before deductions
+
 Sonstiger Abzug: ${(reqDoc.currency)!""} (BA Nr. xxx - Ursache)
-Auszahlungsbetrag: {!Opportunity.Betrag_Restzahlung_IST__c}
+This position shows ONE deduction with amount and reason (e.g. defective handling) and is repeated if there is more than one deduction (e.g. defective handling and Bonus)
+
+
+Auszahlungsbetrag: Opportunity.Betrag_Restzahlung_IST__c
+This is the actual payable amount. The import department makes the deductions on the payment-advise (if there are any) to the FIBU and writes down the payable amount.
+
 
 Rechnungsnummer: ${(reqDoc.vendorDocNo)!""}
 
-Lieferantennr. AS400: {!Account.Lieferanten_Nr_AS_400__c}
+Lieferantennr. AS400: Account.Lieferanten_Nr_AS_400__c
 
 
 Mit freundlichen Grüßen
 
-{!Opportunity.LastModifiedBy}
+Opportunity.LastModifiedBy
 
 POCO Service AG
