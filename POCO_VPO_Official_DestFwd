@@ -57,7 +57,7 @@
           <#assign tel_out = '${country} ${seg1} ${seg2} ${seg3} ${seg4}'>
         </#if>    
         <#assign vendor_contact_tel = '${tel_out}'>
-		
+      
         <#assign tel = (contact.faxNo)!'(none)'>
         <#assign tel_out = tel>
         <#if (tel[0] == '+') && (tel?length == 12)>
@@ -67,9 +67,9 @@
           <#assign seg3 = tel[6..7]>
           <#assign seg4 = tel[10..]>
           <#assign tel_out = '${country} ${seg1} ${seg2} ${seg3} ${seg4}'>
-        </#if>
-		<#assign vendor_contact_fax = '${tel_out}'>
-    
+        </#if>    
+        <#assign vendor_contact_fax = '${tel_out}'>
+  
         <#assign vendor_contact_email = '${(contact.email)!""}'>
       </#if>
     </#list>
@@ -155,9 +155,9 @@ Verschiffung nicht mehr als zwei Wochen vorher:<br />
 <br />
 <strong>Lieferant:</strong> \t ${(reqDoc.vendorName)!""}<br />
 <strong>Ansprechpartner:</strong> \t ${vendor_contact} <br />
-<#nt>Tel: ${vendor_contact_tel} <#nt><br />
-<#nt>Fax: ${vendor_contact_fax} <#nt><br />
-<#nt>Email: ${vendor_contact_email} <#nt><br />
+Tel: &nbsp; &nbsp; &nbsp; ${vendor_contact_tel} <br />
+Fax: ${vendor_contact_fax} <br />
+Email: ${vendor_contact_email} <br />
 <br />
 Incoterm: ${(reqDoc.incoterm.name)!""}<br />
 <br />
