@@ -6,7 +6,7 @@
 <#assign vendor_contact = 'nothing'>
 <#if contacts[0]??>
   <#list contacts as contact>
-    <#if (contact.position!'catch')?lower_case?contains('poco')>
+    <#if ((contact.position)!'catch')?lower_case?contains('poco')>
       
       <#assign vendor_contact = '${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
     
