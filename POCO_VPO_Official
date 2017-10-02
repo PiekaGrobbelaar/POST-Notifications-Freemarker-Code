@@ -1,0 +1,64 @@
+<#assign from_contact = 'Import Department'>
+
+<#assign parties = reqDoc.parties>
+<#if parties[0]??>
+  <#list parties as party>
+    <#assign contact_type = (party.partyNameName)!'catch'>
+    <#assign contact_name = (party.contactUser.firstName)!'catch'>
+    <#assign contact_lastname = (party.contactUser.lastName)!'catch'>
+    <#if (contact_type == 'Import') && (contact_name != 'catch') && (contact_lastname != 'catch')>
+      <#assign from_contact = '${contact_name} ${contact_lastname}'>
+    </#if>
+  </#list>
+</#if>
+
+<#assign vendor_contact = (reqDoc.vendorName)!"">
+<#assign contacts = reqDoc.vpoContact> 
+<#if contacts[0]??>
+  <#list contacts as contact>
+    <#if ((contact.position)!'catch')?lower_case?contains('poco')>
+      <#assign vendor_contact = '${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>
+	</#if>
+  </#list>
+</#if>
+
+
+Dear ${vendor_contact}<br /><br />
+
+We hereby place a new order with your company. The details are as follows:<br /><br />
+
+<strong>Order number:</strong> &nbsp; ${(reqDoc.customerVpoRef)!""}<br /><br />
+
+<#assign shipments=reqDoc.vpoShip>
+<#list shipments as shipment>
+  <#assign shipping_date = shipment.shipmentDate>
+  <#assign shipping_date_str = shipping_date.format("DD/MM/YYYY")>
+  <#assign awesome_shipping_date = 'Latest Shipment Date: ${shipping_date_str}'>
+  <#assign port_of_loading = 'Port of Loading: ${(shipment.portOfLoading.name)!""}'>
+
+  <#if shipments?size gt 1>
+    <#assign the_shipmentNo = shipment.shipmentNo>
+    <strong>Shipment No ${the_shipmentNo}:</strong><br />
+  </#if>
+  
+  ${awesome_shipping_date}<br />
+  ${port_of_loading}<br /><br />
+  
+</#list>
+
+<strong>Payment Term:</strong> &nbsp; ${(reqDoc.paymentMethod.name)!""} ${(reqDoc.paymentTerm.name)!""}<br /><br />
+
+Attached please find the item details.<br /><br />
+
+Forwarding agent for this order is Global Warehouse and Logistics GmbH. <br />
+Contact is Mr. Dirk Schauer (dirk.schauer@globalwarehouse.de).<br />
+Please note that the goods need to be produced in accordance with European quality standards.<br /><br />
+
+This order is computer generated and valid and official with no signature and stamp from our side. Instead of issueing a proforma invoice please sign and stamp this purchase order on every page in the lower right corner and return by email.<br /><br />
+
+Should you have any further questions, please do not hesitate to contact me.<br /><br />
+
+Thanks in advance and best regards,<br /><br />
+
+${from_contact}<br />
+POCO Service AG
