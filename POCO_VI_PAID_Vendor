@@ -1,4 +1,4 @@
-<#assign lines = (reqDoc.VendorInvoiceShipItem)!'loser'>
+<#assign lines = (reqDoc.vendorInvoiceShipItem)!'loser'>
 <#assign vpoRef = (lines[0].customerVpoRef)!'fuck'>
 The vpoRef is ${vpoRef!'weird'}
 <br />
