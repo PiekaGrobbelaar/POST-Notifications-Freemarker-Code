@@ -1,3 +1,9 @@
+<#assign lines = reqDoc.vpo>
+<#assign vpoRef = (lines[0].customerVpoRef)!'didnt work. fuk!'>
+The vpoRef is ${vpoRef}
+<br />
+<br />
+
 Dear ${(reqDoc.vendorName)!""},<br />
 <br />
 The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering POCO PO(s) ${(reqDoc.vpo.customerVpoRef)!""} has been arranged.<br />
@@ -15,3 +21,5 @@ Thanks and Best Regards<br />
 ${(reqDoc.updateUserName)!""}<br />
 <br />
 POCO Service AG
+
+
