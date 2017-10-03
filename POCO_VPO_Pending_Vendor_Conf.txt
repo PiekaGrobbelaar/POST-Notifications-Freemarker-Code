@@ -28,9 +28,6 @@
 	</#list>
 </#if>
 
-<#assign payment_method = '}'>
-<#assign payment_term = ''>
-
 ${address_to}<br />
 <br />
 We hereby place a new order with your company. The details are as follows:<br /><br />
@@ -55,8 +52,7 @@ We hereby place a new order with your company. The details are as follows:<br />
   <br />
 </#if>
 
-Payment Term: &emsp;&emsp;&emsp;&emsp;&emsp;${(reqDoc.paymentTerm.name)!""}<br />
-Payment Method: &emsp;&emsp;&emsp;&nbsp;&nbsp;&thinsp; ${(reqDoc.paymentMethod.name)!""}<br /><br />
+<strong>Payment Term:</strong> &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&thinsp;${(reqDoc.paymentMethod.name)!""} ${(reqDoc.paymentTerm.name)!""}<br /><br />
 
 Attached please find the item details...<br />
 <br />
