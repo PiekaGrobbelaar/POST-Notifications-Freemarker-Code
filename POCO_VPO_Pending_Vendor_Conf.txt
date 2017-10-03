@@ -1,66 +1,63 @@
+<#assign address_to = 'Dear ${reqDoc.vendorName}'>
+<#assign from_party = 'Import Department'>
+
+<#assign parties=reqDoc.parties>
+<#if parties[0]??>
+  <#list parties as party>
+    <#assign contact_type = (party.partyNameName)!'catch'>
+    <#assign contact_name = (party.contactUser.firstName)!'catch'>
+    <#assign contact_lastname = (party.contactUser.lastName)!'catch'>
+    <#if (contact_type == 'Import') && (contact_name != 'catch') && (contact_lastname != 'catch')>
+      <#assign from_party = '${contact_name} ${contact_lastname}'>
+    </#if>
+  </#list>
+</#if>
+
 <#assign date1=reqDoc.custDate1!"not found">
 <#if date1!="not found">
 	<#assign date1Str = date1.format("DD/MM/YYYY")>
 	<#assign shipment_date = 'Latest Shipment Date: ${date1Str}'>
 </#if>
+
 <#assign contacts = reqDoc.vpoContact>
-<#assign address_to = 'nothing'>
 <#if contacts[0]??>
 	<#list contacts as contact>
-		<#if contact.position?lower_case?contains('poco')>
+		<#if (contact.position!'catch')?lower_case?contains('poco')>
 			<#assign address_to = 'Dear ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>	
 		</#if>
 	</#list>
 </#if>
 
-<#if address_to == 'nothing'>
-	<#assign address_to = 'Dear ${reqDoc.vendorName}'>
-</#if>
-
-<#assign payment_method = 'Payment Term: ${(reqDoc.paymentTerm.name)!""}'>
-<#assign payment_term = 'Payment Method: ${(reqDoc.paymentMethod.name)!""}'>
-
-<#assign parties=reqDoc.parties>
-<#if parties[0]??>
-	<#list parties as party>
-		<#if party.partyNameName == "Import">
-			<#assign from_party = '${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""}'>
-		</#if>
-	</#list>
-</#if>
+<#assign payment_method = '}'>
+<#assign payment_term = ''>
 
 ${address_to}<br />
 <br />
-We hereby place a new order with your company. The details are as follows:<br />
-<br />
-POCO Order number: ${(reqDoc.customerVpoRef)!""}<br />
-${payment_method}<br />
-${payment_term}<br />
-<br />
+We hereby place a new order with your company. The details are as follows:<br /><br />
+
+<strong>POCO Order Number: </strong> &emsp;&nbsp; ${(reqDoc.customerVpoRef)!""}<br />
+
 <#assign shipments=reqDoc.vpoShip>
+<#list shipments as shipment>
+  <#assign shipping_date = shipment.shipmentDate>
+  <#assign shipping_date_str = shipping_date.format("DD/MM/YYYY")>
+  <#if shipments?size gt 1>
+    <#assign the_shipmentNo = shipment.shipmentNo>
+    <br /><strong>Shipment No ${the_shipmentNo}:</strong><br />
+  </#if>
+  
+  Latest Shipment Date:&emsp;&emsp;&thinsp;&thinsp;${shipping_date_str}<br />
+  Port of Loading: &emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp; ${(shipment.portOfLoading.name)!""}<br />
+  
+</#list>
+
 <#if shipments?size gt 1>
-	<#list shipments as shipment>
-		<#assign shipmentNo = 'Shipment No: ${shipment.shipmentNo}'>
-		<#assign shipping_date = shipment.shipmentDate>
-		<#assign shipping_date_str = shipping_date.format("DD/MM/YYYY")>
-		<#assign awesome_shipping_date = 'Shipment Date: ${shipping_date_str}'>
-		<#assign port_of_loading = 'Port of Loading: ${(shipment.portOfLoading.name)!""}'>
-		${shipmentNo}<br />
-		${awesome_shipping_date}<br />
-		${port_of_loading}<br />
-		<br />
-	</#list>
-<#else>
-	<#list shipments as shipment>
-		<#assign shipping_date = shipment.shipmentDate>
-		<#assign shipping_date_str = shipping_date.format("DD/MM/YYYY")>
-		<#assign awesome_shipping_date = 'Shipment Date: ${shipping_date_str}'>
-		<#assign port_of_loading = 'Port of Loading: ${(shipment.portOfLoading.name)!""}'>
-		${awesome_shipping_date}<br />
-		${port_of_loading}<br />
-		<br />
-	</#list>
+  <br />
 </#if>
+
+Payment Term: &emsp;&emsp;&emsp;&emsp;&emsp;${(reqDoc.paymentTerm.name)!""}<br />
+Payment Method: &emsp;&emsp;&emsp;&nbsp;&nbsp;&thinsp; ${(reqDoc.paymentMethod.name)!""}<br /><br />
+
 Attached please find the item details...<br />
 <br />
 Forwarding agent for this order is Global Warehouse and Logistics GmbH.<br />
@@ -72,6 +69,5 @@ This order is computer generated and valid and official with no signature and st
 <br />
 Thanks in advance and best regards,<br />
 <br />
-POCO Import Dept<br />
-<br />
-${from_party}
+${from_party}<br />
+POCO Service AG
