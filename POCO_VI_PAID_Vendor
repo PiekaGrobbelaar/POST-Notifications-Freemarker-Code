@@ -1,6 +1,6 @@
 Dear ${(reqDoc.vendorName)!""},<br />
 <br />
-The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering POCO PO(s) ${(reqDoc.customerVpoRef)!""} has been arranged.<br />
+The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering POCO PO(s) ${(reqDoc.vpo.customerVpoRef)!""} has been arranged.<br />
 <br />
 Please arrange dispatch of original documents asap by express courrier directly to our forwarder:<br />
 <br />
