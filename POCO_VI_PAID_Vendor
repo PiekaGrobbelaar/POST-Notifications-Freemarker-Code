@@ -1,17 +1,17 @@
-Dear  ${(reqDoc.vendorName)!""},
-
-The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""}  by  ${(reqDoc.paymentMethodName)!""}   ${(reqDoc.paymentTermName)!""}  covering POCO PO(s)   ${(reqDoc.customerVpoRef)!""} has been arranged.
-
-Please arrange dispatch of original documents asap by express courrier directly to our forwarder 
-
-Global Warehouse and Logistics GmbH. 
-Attn Mr. Dirk Schauer
-Langerbrugger Strasse 5, 
-26655 Westerstede, 
-Germany
-
-Thanks and Best Regards
-
-${(reqDoc.updateUserName)!""}
-
+Dear ${(reqDoc.vendorName)!""},<br />
+<br />
+The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering POCO PO(s) ${(reqDoc.customerVpoRef)!""} has been arranged.<br />
+<br />
+Please arrange dispatch of original documents asap by express courrier directly to our forwarder:<br />
+<br />
+Global Warehouse and Logistics GmbH.<br />
+Attn Mr. Dirk Schauer<br />
+Langerbrugger Strasse 5,<br />
+26655 Westerstede, Germany<br />
+<br />
+Thanks and Best Regards<br />
+<br />
+<br />
+${(reqDoc.updateUserName)!""}<br />
+<br />
 POCO Service AG
