@@ -1,5 +1,5 @@
 <#assign lines = reqDoc.vpo>
-<#assign vpoRef = (lines[0].customerVpoRef)!'didnt work. fuk!'>
+<#assign vpoRef = (lines[0].customerVpoRef)!'fuck'>
 The vpoRef is ${vpoRef}
 <br />
 <br />
