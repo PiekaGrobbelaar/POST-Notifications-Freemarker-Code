@@ -1,0 +1,69 @@
+<#assign address_to = 'Dear ${reqDoc.vendorName}'>
+<#assign from_party = 'Import Department'>
+
+<#assign parties=reqDoc.parties>
+<#if parties[0]??>
+  <#list parties as party>
+    <#assign contact_type = (party.partyNameName)!'catch'>
+    <#assign contact_name = (party.contactUser.firstName)!'catch'>
+    <#assign contact_lastname = (party.contactUser.lastName)!'catch'>
+    <#if (contact_type == 'Import') && (contact_name != 'catch') && (contact_lastname != 'catch')>
+      <#assign from_party = '${contact_name} ${contact_lastname}'>
+    </#if>
+  </#list>
+</#if>
+
+<#assign date1=reqDoc.custDate1!"not found">
+<#if date1!="not found">
+	<#assign date1Str = date1.format("DD/MM/YYYY")>
+	<#assign shipment_date = 'Latest Shipment Date: ${date1Str}'>
+</#if>
+
+<#assign contacts = reqDoc.vpoContact>
+<#if contacts[0]??>
+	<#list contacts as contact>
+		<#if (contact.position!'catch')?lower_case?contains('poco')>
+			<#assign address_to = 'Dear ${(contact.title.name)!""} ${(contact.firstName)!""} ${(contact.lastName)!""}'>	
+		</#if>
+	</#list>
+</#if>
+
+${address_to}<br />
+<br />
+Herewith again the detail of order ${(reqDoc.customerVpoRef)!""} that we would like to place with your company.<br /><br />
+
+<strong>POCO Order Number: </strong> &emsp;&nbsp; ${(reqDoc.customerVpoRef)!""}<br />
+
+<#assign shipments=reqDoc.vpoShip>
+<#list shipments as shipment>
+  <#assign shipping_date = shipment.shipmentDate>
+  <#assign shipping_date_str = shipping_date.format("DD/MM/YYYY")>
+  <#if shipments?size gt 1>
+    <#assign the_shipmentNo = shipment.shipmentNo>
+    <br /><strong>Shipment No ${the_shipmentNo}:</strong><br />
+  </#if>
+  
+  Latest Shipment Date:&emsp;&emsp;&thinsp;&thinsp;${shipping_date_str}<br />
+  Port of Loading: &emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&nbsp;&thinsp; ${(shipment.portOfLoading.name)!""}<br />
+  
+</#list>
+
+<#if shipments?size gt 1>
+  <br />
+</#if>
+
+<strong>Payment Term:</strong> &emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;&nbsp;&thinsp;${(reqDoc.paymentMethod.name)!""} ${(reqDoc.paymentTerm.name)!""}<br /><br />
+
+Attached please find the item details...<br />
+<br />
+Forwarding agent for this order is Global Warehouse and Logistics GmbH.<br />
+Contact is Mr. Dirk Schauer (dirk.schauer@globalwarehouse.de).<br />
+<br />
+Please note that the goods need to be produced in accordance with European quality standards.<br />
+<br />
+This order is computer generated and valid and official with no signature and stamp from our side. Instead of issueing a proforma invoice please sign and stamp this purchase order on every page in the lower right corner and return by email. Should you have any further questions, please do not hesitate to contact me.<br />
+<br />
+Thanks in advance and best regards,<br />
+<br />
+${from_party}<br />
+POCO Service AG
