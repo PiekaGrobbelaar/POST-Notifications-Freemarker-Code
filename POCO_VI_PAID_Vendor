@@ -1,0 +1,17 @@
+Dear  ${(reqDoc.vendorName)!""},
+
+The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""}  by  ${(reqDoc.paymentMethodName)!""}   ${(reqDoc.paymentTermName)!""}  covering POCO PO(s)   ${(reqDoc.customerVpoRef)!""} has been arranged.
+
+Please arrange dispatch of original documents asap by express courrier directly to our forwarder 
+
+Global Warehouse and Logistics GmbH. 
+Attn Mr. Dirk Schauer
+Langerbrugger Strasse 5, 
+26655 Westerstede, 
+Germany
+
+Thanks and Best Regards
+
+${(reqDoc.updateUserName)!""}
+
+POCO Service AG
