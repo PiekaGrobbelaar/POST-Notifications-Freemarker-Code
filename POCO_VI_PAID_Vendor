@@ -1,12 +1,19 @@
+<#assign theVPOs = ['bob']>
 <#assign lines = (reqDoc.vendorInvoiceShipItems)!'loser'>
-<#assign vpoRef = (lines[0].customerVpoRef)!'fuck'>
-The vpoRef is ${vpoRef!'weird'}
-<br />
-<br />
+
+<#list lines as line>
+  <#assign vpoRef = (line.customerVpoRef)!'fuck'>
+  <#if theVPOs.contains(vpoRef)>
+    <#assign wedo = 'nothing'>
+  <#else>
+    <#assign theVPOs = theVPOs + ['bill']>
+  </#if>
+</#list>
 
 Dear ${(reqDoc.vendorName)!""},<br />
 <br />
-The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering POCO PO(s) ${(reqDoc.vpo.customerVpoRef)!""} has been arranged.<br />
+
+The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering POCO PO(s) ${(theVPOs.join(', '))!'weird'} has been arranged.<br />
 <br />
 Please arrange dispatch of original documents asap by express courrier directly to our forwarder:<br />
 <br />
