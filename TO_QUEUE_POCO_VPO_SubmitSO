@@ -1,0 +1,25 @@
+{<br />
+"NotificationType": "POCO_VPO_Submitted_To_SO", <br />
+"VPORef": "${(reqDoc.vpoNo)!""}", <br />
+"VPOVersion": "${(reqDoc.version)!""}", <br />
+"CustomerRef": "${(reqDoc.custCode)!""}", <br />
+"VendorRef": "${(reqDoc.vendorCode)!""}", <br />
+Shipments: [ <br />
+<#assign shipments=reqDoc.vpoShip>
+<#assign virginity = 'intact'>
+<#if shipments[0]??>
+  <#list shipments as shipment>
+	<#if virginity != 'intact'>
+	  , <br />
+	</#if>
+	<#assign virginity = 'broken'> 
+    { <br />
+	"DespatchDate": "${(shipment.shipmentDate)!""}", <br />
+	"InDCDate": "${(shipment.custDate2)!""}", <br />
+	"FinalDestinationCode": "${(shipment.finalDestination.code)!""}" <br />
+	}
+  </#list>
+</#if>
+<br />
+]<br />
+}
