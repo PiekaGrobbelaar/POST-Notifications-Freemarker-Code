@@ -1,19 +1,32 @@
-<#assign theVPOs = ['bob']>
+<#assign theVPOs = []>
 <#assign lines = (reqDoc.vendorInvoiceShipItems)!'loser'>
-
 <#list lines as line>
   <#assign vpoRef = (line.customerVpoRef)!'fuck'>
-  <#if theVPOs.contains(vpoRef)>
-    <#assign wedo = 'nothing'>
-  <#else>
-    <#assign theVPOs = theVPOs + ['bill']>
+  <#assign next_workaround = theVPOs?seq_contains(vpoRef)?string('skipit', 'addit')>
+  <#if next_workaround == 'addit'>
+    <#assign theVPOs = theVPOs + ['${vpoRef}']>
   </#if>
 </#list>
+
+<#assign theSize = theVPOs?size>
+
+<#assign glorious_result = ''>
+<#if theSize == 1>
+  <#assign glorious_result = 'POCO PO ${theVPOs[0]}'>
+<#elseif theSize == 2>
+  <#assign glorious_result = 'POCO POs ${theVPOs[0]} and ${theVPOs[1]}'>
+<#else>
+  <#assign glorious_result = 'POCO POs '>
+  <#list 0..(theSize-2) as counter>
+	<#assign glorious_result = '${glorious_result} ${theVPOs[counter]},'>
+  </#list>
+  <#assign glorious_result = '${glorious_result} and ${theVPOs?last}'>
+</#if>
 
 Dear ${(reqDoc.vendorName)!""},<br />
 <br />
 
-The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering POCO PO(s) ${(theVPOs.join(', '))!'weird'} has been arranged.<br />
+The payment of your commercial invoice Nr: ${(reqDoc.vendorDocNo)!""} by ${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""} covering ${glorious_result} has been arranged.<br />
 <br />
 Please arrange dispatch of original documents asap by express courrier directly to our forwarder:<br />
 <br />
@@ -28,5 +41,3 @@ Thanks and Best Regards<br />
 ${(reqDoc.updateUserName)!""}<br />
 <br />
 POCO Service AG
-
-
