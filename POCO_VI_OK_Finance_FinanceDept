@@ -70,7 +70,7 @@ für den oben Auftrag erhalten Sie die Inkassoandienung zwecks Weiterleitung an 
 <strong>Lieferant:</strong>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;${(reqDoc.vendorName)!""}<br />
 <br />
 <strong>Bezhalung durch:</strong>&emsp;&emsp;&nbsp;&nbsp;&nbsp;${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""}<br />
-<strong>Warenwert: </strong>${long_pad}<span style="font-family:courier new,courier,monospace;">${the_amount}</span>&nbsp;${cur}<br />
+<strong>Warenwert: </strong>${long_pad}<span style="font-family:courier new,courier,monospace;">${the_amount}&nbsp;&nbsp;</span>${cur}<br />
 <br />
 <#assign counter = 1>
 
