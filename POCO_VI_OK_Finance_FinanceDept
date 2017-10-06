@@ -1,21 +1,209 @@
-Hallo Herr Bolte,
+<span style="font-family:arial,helvetica,sans-serif;">
+<#assign cur = reqDoc.currency.name>
+<#assign totalAmt = ((reqDoc.totalAmt)!'no_totalAmt')?string>
 
-für den oben genannten Auftrag erhalten Sie die Inkassoandienung zwecks Weiterleitung an die Commerzbank.
+Hallo Finanzabteilung,<br />
+<br />
+für den oben Auftrag erhalten Sie die Inkassoandienung zwecks Weiterleitung an die Commerzbank.<br />
+<br />
 
-Auftragsnummer: ${(reqDoc.custPoNo)!""}
-Warenwert: {!Opportunity.Amount}
-${(reqDoc.totalAmt)!""} ${(reqDoc.totalAmount)!""}
-Anzahlungsbetrag: {!Opportunity.Betrag_Anzahlung_IST__c}
-Sonstiger Abzug: ${(reqDoc.currency)!""} (BA Nr. xxx - Ursache)
-Auszahlungsbetrag: {!Opportunity.Betrag_Restzahlung_IST__c}
+<#assign total_value = 0>
+<#assign theVPOs = []>
+<#assign lines = (reqDoc.vendorInvoiceShipItems)!'loser'>
+<#list lines as line>
+  <#assign line_total = line.totalAmount>
+  <#assign total_value = total_value + line_total>
+  <#assign vpoRef = (line.customerVpoRef)!'fuck'>
+  <#assign next_workaround = theVPOs?seq_contains(vpoRef)?string('skipit', 'addit')>
+  <#if next_workaround == 'addit'>
+    <#assign theVPOs = theVPOs + ['${vpoRef}']>
+  </#if>
+</#list>
 
-Rechnungsnummer: ${(reqDoc.vendorDocNo)!""}
+<#assign theSize = theVPOs?size>
+<#assign glorious_result = ''>
+<#if theSize == 1>
+  <#assign glorious_result = '${theVPOs[0]}'>
+<#elseif theSize == 2>
+  <#assign glorious_result = '${theVPOs[0]} und ${theVPOs[1]}'>
+<#else>
+  <#list 0..(theSize-2) as counter>
+    <#assign glorious_result = '${glorious_result} ${theVPOs[counter]},'>
+  </#list>
+  <#assign glorious_result = '${glorious_result} und ${theVPOs?last}'>
+</#if>
 
-Lieferantennr. AS400: {!Account.Lieferanten_Nr_AS_400__c}
+<#assign long_pad = '&emsp;&emsp;&emsp;&emsp;&nbsp;&thinsp;'>
 
+<#assign the_amount = (total_value?string)>
+<#assign my_length = the_amount?length>  
+<#if my_length lt 3>
+  <#assign the_amount = '${the_amount}.00'>
+<#elseif the_amount[my_length - 1] == '.'>
+  <#assign the_amount = '${the_amount}00'>  
+<#elseif the_amount[my_length - 2] == '.'>
+  <#assign the_amount = '${the_amount}0'>
+<#elseif the_amount[my_length - 3] == '.'>
+  <#assign all_good = 1>
+<#else>
+  <#assign the_amount = '${the_amount}.00'>  
+</#if>
+<#assign my_length = the_amount?length>  
+<#if my_length == 3>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 4>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 5>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 6>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 7>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 8>
+  <#assign the_amount = '&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 9>
+  <#assign the_amount = '&nbsp;${the_amount}'>
+</#if>
 
-Mit freundlichen Grüßen
+<strong>Auftragsnummer:</strong>&emsp;&emsp;&nbsp;&nbsp;&nbsp;${glorious_result}<br />
+<strong>Rechnungsnummer:</strong>&emsp;&nbsp;${(reqDoc.vendorDocNo)!""}; <a href="${docUrl}">${(reqDoc.refNo)!""}</a><br />
+<strong>Lieferant:</strong>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;${(reqDoc.vendorName)!""}<br />
+<br />
+<strong>Bezhalung durch:</strong>&emsp;&emsp;&nbsp;&nbsp;&nbsp;${(reqDoc.paymentMethodName)!""} ${(reqDoc.paymentTermName)!""}<br />
+<strong>Warenwert: </strong>${long_pad}<span style="font-family:courier new,courier,monospace;">${the_amount}</span>&nbsp;${cur}<br />
+<br />
+<#assign counter = 1>
 
-{!Opportunity.LastModifiedBy}
+<#assign again_charges = reqDoc.vendorInvoiceChargeOnDocs>
+<#list again_charges as again_charge>
+  <#assign the_type = (again_charge.chargeType.name)!"no_chargeType.name">
+  <#assign the_amount = ((again_charge.chargeAmt)!"no_chargeAmt")?string>
+  <#assign my_length = the_amount?length>  
+  <#if my_length lt 3>
+    <#assign the_amount = '${the_amount}.00'>
+  <#elseif the_amount[my_length - 1] == '.'>
+    <#assign the_amount = '${the_amount}00'>  
+  <#elseif the_amount[my_length - 2] == '.'>
+    <#assign the_amount = '${the_amount}0'>
+  <#elseif the_amount[my_length - 3] == '.'>
+    <#assign all_good = 1>
+  <#else>
+    <#assign the_amount = '${the_amount}.00'>  
+  </#if>
+  <#if the_type != 'Discount'>
+    <#assign the_amount = '(${the_amount}'>
+  </#if>
+  <#assign my_length = the_amount?length>  
+  <#if my_length == 3>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 4>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 5>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 6>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 7>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 8>
+    <#assign the_amount = '&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 9>
+    <#assign the_amount = '&nbsp;${the_amount}'>
+  </#if>
+  <#assign the_desc = (again_charge.chargeDesc)!"no_chargeDescr">
+  <strong>Sonstiger Abzug</strong>&nbsp;<span style="font-family:courier new,courier,monospace;"><strong>${counter?string}:&nbsp;</strong>${the_amount}
+  <#if the_type != 'Discount'>
+    )&nbsp;
+  <#else>
+    &nbsp;&nbsp;
+  </#if></span>
+  ${cur} ${the_type} - ${the_desc}<br />
+  <#assign counter = counter + 1>
+</#list>
+<#assign pm_charges = reqDoc.vendorInvoiceCharges>
+<#list pm_charges as pm_charge>
+  <#assign the_type = (pm_charge.chargeType.name)!"no_chargeType.name">
+  <#assign the_amount = ((pm_charge.chargeAmt)!"no_chargeAmt")?string>
+  <#assign my_length = the_amount?length>  
+  <#if my_length lt 3>
+    <#assign the_amount = '${the_amount}.00'>
+  <#elseif the_amount[my_length - 1] == '.'>
+    <#assign the_amount = '${the_amount}00'>  
+  <#elseif the_amount[my_length - 2] == '.'>
+    <#assign the_amount = '${the_amount}0'>
+  <#elseif the_amount[my_length - 3] == '.'>
+    <#assign all_good = 1>
+  <#else>
+    <#assign the_amount = '${the_amount}.00'>  
+  </#if>
+  <#if the_type != 'Discount'>
+    <#assign the_amount = '(${the_amount}'>
+  </#if>
+  <#assign my_length = the_amount?length>  
+  <#if my_length == 3>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 4>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 5>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 6>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 7>
+    <#assign the_amount = '&nbsp;&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 8>
+    <#assign the_amount = '&nbsp;&nbsp;${the_amount}'>
+  <#elseif my_length == 9>
+    <#assign the_amount = '&nbsp;${the_amount}'>
+  </#if>
+  <#assign the_desc = (pm_charge.chargeDesc)!"no_chargeDescr">
+  <#assign the_item = (pm_charge.viShipmentItem.customerItemNo)!"no_viShipmentItem">
+  <#assign the_value = (pm_charge.chargeValue)!"no_chargeValue">
+  <strong>Sonstiger Abzug&nbsp;</strong><span style="font-family:courier new,courier,monospace;"><strong>${counter?string}:</strong>&nbsp;${the_amount}
+  <#if the_type != 'Discount'>
+    )&nbsp;
+  <#else>
+    &nbsp;&nbsp;
+  </#if>
+  </span>
+  ${cur} ${the_type}: ${the_value?string}% on item ${the_item} - ${the_desc} <br />
+  <#assign counter = counter + 1>
+</#list>
+<br />
 
-POCO Service AG
+<#assign the_amount = (totalAmt?string)>
+<#assign my_length = the_amount?length>  
+<#if my_length lt 3>
+  <#assign the_amount = '${the_amount}.00'>
+<#elseif the_amount[my_length - 1] == '.'>
+  <#assign the_amount = '${the_amount}00'>  
+<#elseif the_amount[my_length - 2] == '.'>
+  <#assign the_amount = '${the_amount}0'>
+<#elseif the_amount[my_length - 3] == '.'>
+  <#assign all_good = 1>
+<#else>
+  <#assign the_amount = '${the_amount}.00'>  
+</#if>
+<#assign my_length = the_amount?length>  
+<#if my_length == 3>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 4>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 5>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 6>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 7>
+  <#assign the_amount = '&nbsp;&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 8>
+  <#assign the_amount = '&nbsp;&nbsp;${the_amount}'>
+<#elseif my_length == 9>
+  <#assign the_amount = '&nbsp;${the_amount}'>
+</#if>
+
+<strong>Auszahlungsbetrag:&nbsp; </strong><span style="font-family:courier new,courier,monospace;">${the_amount}&nbsp;&nbsp;</span>${cur}<br />
+<br />
+<br />
+Mit freundlichen Grüßen<br />
+<br />
+${(reqDoc.updateUserName)!""}<br />
+<br />
+POCO Service AG</span><br />
