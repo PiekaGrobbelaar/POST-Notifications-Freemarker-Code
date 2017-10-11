@@ -1,0 +1,12 @@
+<span style="font-family:arial,helvetica,sans-serif;">Dear</span><#assign parties=relatedDoc.parties><#if parties[0]??><#list parties as party>
+<p>
+	 </p>
+<p>
+	<span style="font-family:arial,helvetica,sans-serif;"><#if party.partyNameName == "Import">${(party.contactUser.firstName)!""} ${(party.contactUser.lastName)!""},</#if></span></p>
+<span style="font-family:arial,helvetica,sans-serif;"></#list></#if><br />
+Kindly note the shipping information has not been received for the order  ${(relatedDoc.custPoNo)!""}, <a href="${docUrl}">${(relatedDoc.vpoNo)!""}</a><br />
+from ${(relatedDoc.vendorName)!""}, with  <#assign date1=relatedDoc.custDate1!"not found"><#if date1!="not found"><#assign date1Str=date1.format("DD/MM/YYYY")>Latest Shipment Date: ${date1Str}<#else>Latest Shipment Date:</#if><br />
+<br />
+Thanks in advance and best regards<br />
+<br />
+POCO Service AG</span><br />
