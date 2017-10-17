@@ -1,4 +1,4 @@
 POCO_VI_OK_Finance_FinanceDept
-  <#assign lines = (reqDoc.vendorInvoiceShipItems)!'loser'>  [Acceptance TEST MESSAGE] Payment to be Arranged: Poco Order ${(lines[0].customerVpoRef)!"no_vpo_ref"}; Invoice: ${(reqDoc.vendorDocNo)!""}, Vendor  ${(reqDoc.vendorName)!""}
 
+  <#assign lines = (reqDoc.vendorInvoiceShipItems)!'loser'>  [Acceptance TEST MESSAGE] Payment to be Arranged: Poco Order ${(lines[0].customerVpoRef)!"no_vpo_ref"}; Invoice: ${(reqDoc.vendorDocNo)!""}, Vendor  ${(reqDoc.vendorName)!""}
 
