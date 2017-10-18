@@ -1,0 +1,7 @@
+{ <br />
+"NotificationType": "VI_OK_FINANCE",
+"CustomerRef": "${(reqDoc.custText6)!'CustomerRef_no_found!'}",
+"VendorRef": "{(reqDoc.vendor.vendorCode)!'VendorRef_not_found!'}",
+"VIRef": "${(reqDoc.invoiceNo)!'VIRef_not_found!'}",
+"updatedOn": "${(reqDoc.version)!'version_not_found!'}"
+}
